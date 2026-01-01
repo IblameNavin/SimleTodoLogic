@@ -7,6 +7,29 @@ import  TodoList  from './components/TodoList'
 
 const [addInput, setAddInput] = useState("")
 const [todos, setTodos] = useState([])
+const [editTodo, setEditTodo] = useState(null)
+const [editText, setEditText] = useState("")
+
+const startEditing = (id, currText)=>{
+  setEditTodo(id)
+  setEditText(currText)
+}
+
+const saveEdit = (id)=>{
+  setTodos((currTodo)=>
+   currTodo.map((todo)=>
+   todo.id === id ? {...todo, text : editText} : todo
+  )
+  )
+  setEditTodo(null)
+}
+
+
+const cancelEdit = ()=>{
+  setEditTodo(null)
+  setEditText("")
+}
+
 
 
 const addInputOnSearch = (e)=>{
@@ -37,6 +60,12 @@ const handleKey = (e)=>{
   }
 }
 
+const handleKeyForEdit = (e, id)=>{
+  if(e.key === "Enter"){
+    saveEdit(id)
+  }
+  }
+
 const deleteTheTodo = (id)=>{
   setTodos((currTodo)=>
    currTodo.filter((todo)=>
@@ -48,7 +77,7 @@ const deleteTheTodo = (id)=>{
   return (
    < div>
    <TodoInput addInputOnSearch = {addInputOnSearch} value = {addInput} addTodo = {addTodo} handleKey = {handleKey}  />
-   <TodoList todos = {todos} todoCompleted = {todoCompleted} deleteTheTodo = {deleteTheTodo} />
+   <TodoList todos = {todos} todoCompleted = {todoCompleted} deleteTheTodo = {deleteTheTodo} startEditing = {startEditing} editTodo = {editTodo} setEditText = {setEditText} saveEdit = {saveEdit} cancelEdit = {cancelEdit} value = {editText} handleKeyForEdit = {handleKeyForEdit}/>
     </div>
   )
 }
